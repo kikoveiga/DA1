@@ -36,4 +36,17 @@ void Utils::readStations() {
 
 void Utils::readNetwork() {
 
+    ifstream file("../dataset/network.csv");
+    string l;
+    getline(file, l);
+    while (getline(file, l)) {
+        stringstream ss(l);
+        string source, destination, capacity, service;
+        getline(ss, source, ',');
+        getline(ss, destination, ',');
+        getline(ss, capacity, ',');
+        getline(ss, service, '\r');
+
+        graph.addEdge(source, destination, stoi(capacity), service);
+    }
 }
