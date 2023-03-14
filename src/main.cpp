@@ -11,10 +11,10 @@ int main() {
 
     Utils utils = Utils();
     Graph grafo = utils.getGraph();
-    vector<Station> stations = grafo.getStations();
+    unordered_map<string, Station> stations = grafo.getStations();
 
-    for (Station station : stations) {
-        cout << station.getName() << ' ' << station.getDistrict() << ' ' << station.getMunicipality() << ' ' << station.getTownship() << ' ' << station.getLine() << endl;
+    for (auto station : stations) {
+        cout << station.second.getName() << ' ' << station.second.getDistrict() << ' ' << station.second.getMunicipality() << ' ' << station.second.getTownship() << ' ' << station.second.getLine() << endl;
     }
 
     cout << '\n';

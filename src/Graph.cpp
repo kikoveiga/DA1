@@ -8,10 +8,10 @@ using namespace std;
 
 Graph::Graph() = default;
 
-const vector<Station>& Graph::getStations() const {
+const unordered_map<string, Station>& Graph::getStations() const {
     return stations;
 }
 
 void Graph::addStation(Station station) {
-    stations.push_back(station);
+    stations.insert({station.getName(), station});
 }

@@ -7,13 +7,14 @@
 
 #include "Station.h"
 
+#include <unordered_map>
 #include <vector>
 
 
 class Graph {
 
 private:
-    std::vector<Station> stations;
+    std::unordered_map<std::string, Station> stations;
 
     struct Edge {
         Station* dest;
@@ -30,6 +31,6 @@ private:
 public:
     explicit Graph();
     void addStation(Station station);
-    const std::vector<Station>& getStations() const;
+    const std::unordered_map<std::string, Station>& getStations() const;
 };
 #endif //DA1_GRAPH_H
