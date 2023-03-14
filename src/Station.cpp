@@ -6,22 +6,30 @@
 
 using namespace std;
 
-const string Station::getName() const {
+Station::Station(const string& name, const string& district, const string& municipality, const string& township, const string& line) {
+    this->name = name;
+    this->district = district;
+    this->municipality = municipality;
+    this->township = township;
+    this->line = line;
+}
+
+const string& Station::getName() const {
     return name;
 }
 
-const string Station::getDistrict() const {
+const string& Station::getDistrict() const {
     return district;
 }
 
-const string Station::getMunicipality() const {
+const string& Station::getMunicipality() const {
     return municipality;
 }
 
-const string Station::getTownship() const {
+const string& Station::getTownship() const {
     return township;
 }
 
-const string Station::getLine() const {
+const string& Station::getLine() const {
     return line;
 }
