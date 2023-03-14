@@ -8,4 +8,4 @@ include_directories(headers)
 include_directories(src)
 
 add_executable(DA1
-        src/main.cpp)
+        src/main.cpp headers/Menu.h src/Menu.cpp)
