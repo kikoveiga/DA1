@@ -25,7 +25,7 @@ int main() {
     for (auto i : nodes) {
         cout << i.first << endl;
         for (auto j : i.second.adj) {
-            cout << j.destination << ' ' << j.capacity << endl;
+            cout << j.destination << ' ' << j.capacity << ' ' << j.service << endl;
         }
         cout << endl;
     }

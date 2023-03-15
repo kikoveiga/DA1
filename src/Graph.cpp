@@ -13,7 +13,7 @@ void Graph::addStation(Station station) {
 }
 
 void Graph::addEdge(const std::string& source, const std::string& destination, unsigned capacity, const std::string& service) {
-    nodes[source].adj.push_back({destination, capacity});
+    nodes[source].adj.push_back({destination, capacity, service});
 }
 
 const unordered_map<string, Station>& Graph::getStations() const {
