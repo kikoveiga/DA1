@@ -33,7 +33,7 @@ public:
     explicit Graph();
 
     void addStation(Station station);
-    void addEdge(const std::string& source, const std::string& destination, unsigned capacity, const std::string& service);
+    void addEdge(const std::string& first, const std::string& second, unsigned capacity, const std::string& service);
 
     const std::unordered_map<std::string, Station>& getStations() const;
     const std::unordered_map<std::string, Node>& getNodes() const;

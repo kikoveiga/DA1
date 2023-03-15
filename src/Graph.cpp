@@ -12,8 +12,9 @@ void Graph::addStation(Station station) {
     stations.insert({station.getName(), station});
 }
 
-void Graph::addEdge(const std::string& source, const std::string& destination, unsigned capacity, const std::string& service) {
-    nodes[source].adj.push_back({destination, capacity, service});
+void Graph::addEdge(const std::string& first, const std::string& second, unsigned capacity, const std::string& service) {
+    nodes[first].adj.push_back({second, capacity, service});
+    nodes[second].adj.push_back({first, capacity, service});
 }
 
 const unordered_map<string, Station>& Graph::getStations() const {
