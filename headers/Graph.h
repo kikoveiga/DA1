@@ -8,6 +8,7 @@
 #include "Station.h"
 
 #include <unordered_map>
+#include <list>
 #include <vector>
 
 
@@ -26,16 +27,15 @@ private:
         std::vector<Edge> adj;
     };
 
-    std::unordered_map<std::string, Station> stations;
     std::unordered_map<std::string, Node> nodes;
 
 public:
     explicit Graph();
 
-    void addStation(Station station);
-    void addEdge(const std::string& first, const std::string& second, unsigned capacity, const std::string& service);
+    void addNode(const std::string& name, const std::string& district,const std::string& municipality, const std::string& township, const std::string& line);
+    void addBidirectionalEdge(const std::string& first, const std::string& second, unsigned capacity, const std::string& service);
 
-    const std::unordered_map<std::string, Station>& getStations() const;
     const std::unordered_map<std::string, Node>& getNodes() const;
+    std::list<std::string> getStationsInDistrict(const std::string& district) const;
 };
 #endif //DA1_GRAPH_H
