@@ -2,7 +2,7 @@
 // Created by kikoveiga on 14-03-2023.
 //
 
-#include "Utils.h"
+#include "../headers/Utils.h"
 
 using namespace std;
 
@@ -18,35 +18,54 @@ const Graph& Utils::getGraph() const {
 void Utils::readStations() {
 
     ifstream file("../dataset/stations.csv");
-    string l;
-    getline(file, l);
-    while (getline(file, l)) {
-        stringstream ss(l);
-        string name, district, municipality, township, line;
-        getline(ss, name, ',');
-        getline(ss, district, ',');
-        getline(ss, municipality, ',');
-        getline(ss, township, ',');
-        getline(ss, line, '\r');
+    string line;
+    getline(file, line);
 
-        Station station = Station(name, district, municipality, township, line);
-        graph.addStation(station);
+    while (getline(file, line)) {
+        vector<string> fields;
+        stringstream ss(line);
+        string field;
+
+        for (int i = 0; i <= 4; i++) {
+
+            if (ss.peek() == '"') {
+                ss.ignore();
+                getline(ss, field, '"');
+                ss.ignore();
+            }
+            else if (i == 4) getline(ss, field, '\r');
+            else getline(ss, field, ',');
+
+            fields.push_back(field);
+        }
+
+        graph.addNode(fields[0], fields[1], fields[2], fields[3], fields[4]);
     }
 }
 
 void Utils::readNetwork() {
 
     ifstream file("../dataset/network.csv");
-    string l;
-    getline(file, l);
-    while (getline(file, l)) {
-        stringstream ss(l);
-        string source, destination, capacity, service;
-        getline(ss, source, ',');
-        getline(ss, destination, ',');
-        getline(ss, capacity, ',');
-        getline(ss, service, '\r');
+    string line;
+    getline(file, line);
 
-        graph.addEdge(source, destination, stoi(capacity), service);
+    while (getline(file, line)) {
+        vector<string> fields;
+        stringstream ss(line);
+        string field;
+
+        for (int i = 0; i <= 3; i++) {
+
+            if (ss.peek() == '"') {
+                ss.ignore();
+                getline(ss, field, '"');
+                ss.ignore();
+            }
+            else if (i == 3) getline(ss, field, '\r');
+            else getline(ss, field, ',');
+
+            fields.push_back(field);
+        }
+        graph.addBidirectionalEdge(fields[0], fields[1], stoi(fields[2]), fields[3]);
     }
 }
