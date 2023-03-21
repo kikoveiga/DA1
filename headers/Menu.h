@@ -6,6 +6,7 @@
 #define DA1_MENU_H
 
 #include "Utils.h"
+#include <iostream>
 
 class Menu {
 
@@ -17,7 +18,7 @@ public:
     explicit Menu();
     void run();
     void mainMenu();
-    void stationMenu();
+    void stationsMenu();
     void cleanTerminal();
 
 };
