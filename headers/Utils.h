@@ -17,7 +17,7 @@ private:
 
 public:
     explicit Utils();
-    const Graph& getGraph() const;
+    Graph getGraph();
     void readStations();
     void readNetwork();
 };

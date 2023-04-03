@@ -7,6 +7,7 @@
 
 #include "Utils.h"
 #include <iostream>
+#include <algorithm>
 
 class Menu {
 
@@ -17,6 +18,8 @@ private:
 public:
     explicit Menu();
     void run();
+    void press0ToContinue();
+    void printStation(const std::string& name);
     void mainMenu();
     void stationsMenu();
     void cleanTerminal();

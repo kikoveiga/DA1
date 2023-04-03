@@ -11,7 +11,7 @@ Utils::Utils() {
     readNetwork();
 }
 
-const Graph& Utils::getGraph() const {
+Graph Utils::getGraph() {
     return graph;
 }
 
