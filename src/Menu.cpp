@@ -15,6 +15,18 @@ string toUpper(string& s) {
     return s;
 }
 
+string capitalizeFirstLetter(string& s) {
+    for (int i = 0; i < s.size(); i++) {
+        if (i == 0 || s[i - 1] == ' ') {
+            s[i] = toupper(s[i]);
+        }
+        else {
+            s[i] = tolower(s[i]);
+        }
+    }
+    return s;
+}
+
 void Menu::cleanTerminal() {
     cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
@@ -48,12 +60,16 @@ void Menu::run() {
                 break;
 
             case 2:
+                trainsMenu();
+                break;
+
+            case 3:
                 exit(0);
         }
     }
 }
 
-void Menu::printStation(const std::string& name) {
+void Menu::printStation(const string& name) {
 
     auto station = utils.getGraph().getNodes().at(name).source;
 
@@ -73,12 +89,13 @@ void Menu::mainMenu() {
          << "|                   MAIN MENU                   |\n"
          << "|-----------------------------------------------|\n"
          << "| 1. STATIONS MENU                              |\n"
-         << "| 2. EXIT                                       |\n"
+         << "| 2. TRAINS MENU                                |\n"
+         << "| 3. EXIT                                       |\n"
          << "-------------------------------------------------\n";
 
     while (true) {
         cout << "   -OPTION: "; getline(cin >> ws, command);
-        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 2) break;
+        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 3) break;
         else cout << "   -INVALID OPTION" << endl;
     }
 }
@@ -108,7 +125,7 @@ void Menu::stationsMenu() {
         while (true) {
             cout << "   -ENTER STATION NAME: "; getline(cin >> ws, name);
             if (utils.getGraph().getNodes().find(name) != utils.getGraph().getNodes().end()) break;
-            else cout << "   -STATION NOT FOUND" << endl;
+            cout << "   -STATION NOT FOUND" << endl;
         }
 
         printStation(name);
@@ -158,7 +175,7 @@ void Menu::stationsMenu() {
         string municipality;
         while (true) {
             cout << "   -ENTER MUNICIPALITY: "; getline(cin >> ws, municipality);
-            if (!utils.getGraph().getStationsInMunicipality(municipality).empty()) break;
+            if (!utils.getGraph().getStationsInMunicipality(toUpper(municipality)).empty()) break;
             cout << "   -INVALID MUNICIPALITY" << endl;
         }
 
@@ -253,6 +270,31 @@ void Menu::stationsMenu() {
     }
 
     command = "1";
+}
+
+void Menu::trainsMenu() {
+
+    cleanTerminal();
+    cout << "-------------------------------------------------\n"
+         << "|                  TRAINS MENU                  |\n"
+         << "|-----------------------------------------------|\n"
+         << "| 1. SEARCH TRAIN                               |\n"
+         << "| 2. GO BACK                                    |\n"
+         << "-------------------------------------------------\n";
+    while (true) {
+        cout << "   -OPTION: "; getline(cin >> ws, command);
+        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 2) break;
+        else cout << "   -INVALID OPTION" << endl;
+    }
+
+    if (command == "1") { // Search Train
+
+    }
+
+    else if (command == "2") { // Go Back
+        command = "0";
+        return;
+    }
 }
 
 

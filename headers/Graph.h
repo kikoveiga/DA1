@@ -13,31 +13,41 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <algorithm>
 
 class Graph {
 
 private:
 
+    struct Node;
+
     struct Edge {
-        std::string destination;
-        unsigned capacity;
+        Node* destination;
+        int capacity;
         std::string service;
+        int flow;
     };
 
     struct Node {
         Station* source;
         std::vector<Edge> adj;
         bool visited = false;
+        Edge* path = nullptr;
     };
+
 
     std::unordered_map<std::string, Node> nodes;
 
 public:
     explicit Graph();
+
     /**
      * Add a Node to the Graph
      * Complexity = O(n)
      */
+
+    Node* findNode(const std::string& name) const;
+
     void addNode(const std::string& name, const std::string& district,const std::string& municipality, const std::string& township, const std::string& line);
 
     /**
@@ -49,7 +59,7 @@ public:
      * @param service
      *  Complexity = O()
      */ // falta complexidade
-    void addBidirectionalEdge(const std::string& first, const std::string& second, unsigned capacity, const std::string& service);
+    void addBidirectionalEdge(const std::string& first, const std::string& second, int capacity, const std::string& service);
 
     const std::unordered_map<std::string, Node>& getNodes() const;
     std::vector<std::string> getStationsInDistrict(const std::string& district) const;
@@ -58,10 +68,16 @@ public:
     std::vector<std::string> getStationsInLine(const std::string& line) const;
 
     void setAllNodesUnvisited();
+    void setAllFlows0();
 
     bool bfs(std::unordered_map<std::string, std::pair<std::string, unsigned>>& parent, std::string source, std::string sink);
 
-    unsigned edmondsKarp(std::string source, std::string sink);
+    int edmondsKarp(Node* source, Node* sink);
+    bool findAugmentingPath(Node* source, Node* sink);
+    int findMinResidualAlongPath(Node* source, Node* sink);
+    void augmentFlowAlongPath(Node* source, Node* sink, int flow);
+    void testAndVisit(std::queue<Node*>& queue, Edge* edge, Node* next, int residual);
+
 
     std::vector<std::pair<std::pair<std::string, std::string>, unsigned>> getMaxFlowStations();
 

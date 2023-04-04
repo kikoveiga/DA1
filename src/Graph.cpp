@@ -3,27 +3,31 @@
 //
 
 #include "../headers/Graph.h"
-#include <iostream>
 
 using namespace std;
 
 Graph::Graph() = default;
 
-void Graph::addNode(const std::string& name, const std::string& district, const std::string& municipality, const std::string& township, const std::string& line) {
+
+void Graph::addNode(const string& name, const string& district, const string& municipality, const string& township, const string& line) {
     auto* station = new Station(name, district, municipality, township, line);
     nodes.insert({name, {station, {}}});
 }
 
-void Graph::addBidirectionalEdge(const std::string& first, const std::string& second, unsigned capacity, const std::string& service) {
-    nodes[first].adj.push_back({second, capacity, service});
-    nodes[second].adj.push_back({first, capacity, service});
+void Graph::addBidirectionalEdge(const string& first, const string& second, int capacity, const string& service) {
+
+    Node* firstNode = &nodes[first];
+    Node* secondNode = &nodes[second];
+
+    firstNode->adj.push_back({secondNode, capacity, service});
+    secondNode->adj.push_back({firstNode, capacity, service});
 }
 
 const unordered_map<string, Graph::Node>& Graph::getNodes() const {
     return nodes;
 }
 
-vector<string> Graph::getStationsInDistrict(const std::string &district) const {
+vector<string> Graph::getStationsInDistrict(const string& district) const {
     vector<string> stations;
     for (auto &node: nodes) {
         if (node.second.source->getDistrict() == district) {
@@ -33,7 +37,7 @@ vector<string> Graph::getStationsInDistrict(const std::string &district) const {
     return stations;
 }
 
-vector<string> Graph::getStationsInMunicipality(const std::string& municipality) const {
+vector<string> Graph::getStationsInMunicipality(const string& municipality) const {
     vector<string> stations;
     for (auto& node: nodes) {
         if (node.second.source->getMunicipality() == municipality) {
@@ -43,7 +47,7 @@ vector<string> Graph::getStationsInMunicipality(const std::string& municipality)
     return stations;
 }
 
-vector<string> Graph::getStationsInTownship(const std::string& township) const {
+vector<string> Graph::getStationsInTownship(const string& township) const {
     vector<string> stations;
     for (auto& node: nodes) {
         if (node.second.source->getTownship() == township) {
@@ -53,7 +57,7 @@ vector<string> Graph::getStationsInTownship(const std::string& township) const {
     return stations;
 }
 
-vector<string> Graph::getStationsInLine(const std::string& line) const {
+vector<string> Graph::getStationsInLine(const string& line) const {
     vector<string> stations;
     for (auto& node: nodes) {
         if (node.second.source->getLine() == line) {
@@ -69,22 +73,31 @@ void Graph::setAllNodesUnvisited() {
     }
 }
 
-bool Graph::bfs(std::unordered_map<std::string, std::pair<std::string, unsigned>>& parent, std::string source, std::string sink) {
-    std::queue<std::string> q;
+void Graph::setAllFlows0() {
+    for (auto& v : nodes) {
+        for (auto& e: v.second.adj) {
+            e.flow = 0;
+        }
+    }
+}
+
+/*
+bool Graph::bfs(unordered_map<string, pair<string, unsigned>>& parent, string source, string sink) {
+    queue<string> q;
     q.push(source);
-    parent[source] = std::make_pair("", 0);
+    parent[source] = make_pair("", 0);
 
     while (!q.empty()) {
-        std::string curr = q.front();
+        string curr = q.front();
         q.pop();
 
         for (const auto& edge : nodes[curr].adj) {
-            std::string dest = edge.destination;
+            Node* dest = edge.destination;
             unsigned cap = edge.capacity;
 
             if (parent.find(dest) == parent.end() && cap > 0) {
                 q.push(dest);
-                parent[dest] = std::make_pair(curr, cap);
+                parent[dest] = make_pair(curr, cap);
 
                 if (dest == sink) {
                     return true;
@@ -96,22 +109,22 @@ bool Graph::bfs(std::unordered_map<std::string, std::pair<std::string, unsigned>
     return false;
 }
 
-unsigned Graph::edmondsKarp(std::string source, std::string sink) {
+unsigned Graph::edmondsKarp(const string& source, const string& sink) {
     unsigned maxFlow = 0;
 
     while (true) {
-        std::unordered_map<std::string, std::pair<std::string, unsigned>> parent;
+        unordered_map<string, pair<string, unsigned>> parent;
         if (!bfs(parent, source, sink)) {
             break;
         }
 
         unsigned flow = INT32_MAX;
-        std::string curr = sink;
+        string curr = sink;
 
         while (curr != source) {
-            std::string prev = parent[curr].first;
+            string prev = parent[curr].first;
             unsigned cap = parent[curr].second;
-            flow = std::min(flow, cap);
+            flow = min(flow, cap);
             curr = prev;
         }
 
@@ -119,7 +132,7 @@ unsigned Graph::edmondsKarp(std::string source, std::string sink) {
         curr = sink;
 
         while (curr != source) {
-            std::string prev = parent[curr].first;
+            string prev = parent[curr].first;
 
             for (auto& edge : nodes[prev].adj) {
                 if (edge.destination == curr) {
@@ -151,9 +164,9 @@ unsigned Graph::edmondsKarp(std::string source, std::string sink) {
     return maxFlow;
 }
 
-std::vector<std::pair<std::pair<std::string, std::string>, unsigned>> Graph::getMaxFlowStations() {
+vector<pair<pair<string, string>, unsigned>> Graph::getMaxFlowStations() {
     int maxFlow, flow = 0;
-    std::vector<std::pair<std::pair<std::string, std::string>, unsigned>> res;
+    vector<pair<pair<string, string>, unsigned>> res;
     for (auto& a : nodes) {
         for (auto &b: nodes) {
 
@@ -172,4 +185,76 @@ std::vector<std::pair<std::pair<std::string, std::string>, unsigned>> Graph::get
     }
     return res;
 }
+*/
 
+void Graph::testAndVisit(queue<Node*> &queue, Edge* edge, Node* next, int residual) {
+    if (!next->visited && residual > 0) {
+        next->visited = true;
+        next->path = edge;
+        queue.push(next);
+    }
+}
+
+bool Graph::findAugmentingPath(Node* source, Node* sink) {
+    setAllNodesUnvisited();
+    source->visited = true;
+
+    queue<Node*> queue;
+    queue.push(source);
+
+    while (!queue.empty() && !sink->visited) {
+        Node* node = queue.front();
+        queue.pop();
+        for(auto& edge: node->adj) {
+            testAndVisit(queue, &edge, edge.destination, edge.capacity - edge.flow);
+        }
+        for(auto& e: node->adj) {
+            testAndVisit(queue, &e, e.destination, e.flow); // acho que aqui é v porque lá têm e.getOrigin
+        }
+    }
+    return sink->visited;
+}
+
+int Graph::findMinResidualAlongPath(Node* source, Node* sink) {
+    int flow = INT32_MAX;
+    for (auto v = sink; v != source;) {
+        auto e = v->path;
+        if (e->destination == v) {
+            flow = std::min(flow, e->capacity - e->flow);
+        }
+
+        else {
+            flow = min(flow, e->flow);
+            v = e->destination;
+        }
+    }
+    return flow;
+}
+
+void Graph::augmentFlowAlongPath(Node* source, Node* sink, int f) {
+    for (Node* next = sink; next != source; ) {
+        auto edge = next->path;
+        double flow = edge->flow;
+        if (edge->destination == next) {
+            edge->flow = flow + f;
+        }
+        else {
+            edge->flow = flow - f;
+            next = edge->destination;
+        }
+    }
+}
+
+int Graph::edmondsKarp(Node* source, Node* sink) {
+
+    int maxFlow = 0;
+    setAllFlows0();
+
+    // Loop to find augmentation paths
+    while (findAugmentingPath(source, sink)) {
+        int flow = findMinResidualAlongPath(source, sink);
+        augmentFlowAlongPath(source, sink, flow);
+        maxFlow += flow;
+    }
+    return maxFlow;
+}
