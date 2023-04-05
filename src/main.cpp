@@ -9,14 +9,16 @@ using namespace std;
 
 void  func_test() {
     Utils utils;
-    /*std::vector<std::pair<std::pair<std::string, std::string>, unsigned>> test = utils.getGraph().getMaxFlowStations();
-    for (std::pair<std::pair<std::string, std::string>, unsigned> help : test) {
+    /*std::vector<std::pair<std::pair<std::string, std::string>, int>> test = utils.getGraph().getMaxFlowStations();
+    for (std::pair<std::pair<std::string, std::string>, int> help : test)
         std::cout << help.first.first << " -> " << help.first.second << " : max = " << help.second << std::endl;*/
-    auto source = utils.getGraph().getNodes().at("Porto Campanhã");
+
+    auto source = utils.getGraph().getNodes().at("Santarém");
     auto sink = utils.getGraph().getNodes().at("Lisboa Oriente");
 
-    int help = utils.getGraph().edmondsKarp(&source, &sink);
-    cout << help << " flow"<< endl;
+    //cout << utils.getGraph().edmondsKarp(source, sink);
+
+
 }
 
 int main() {
@@ -24,5 +26,4 @@ int main() {
     func_test();
 
     //Menu menu;
-    //menu.run();
 }

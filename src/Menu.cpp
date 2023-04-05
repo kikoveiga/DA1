@@ -41,6 +41,7 @@ void Menu::press0ToContinue() {
 
 Menu::Menu() {
     command = "0";
+    run();
 }
 
 void Menu::run() {
@@ -71,15 +72,15 @@ void Menu::run() {
 
 void Menu::printStation(const string& name) {
 
-    auto station = utils.getGraph().getNodes().at(name).source;
+    auto station = utils.getGraph().getNodes().at(name)->station;
 
     cout << endl;
     cout << "   -STATION " << name << " FOUND" << endl;
-    cout << "      -NAME: " << station->getName() << endl;
-    cout << "      -DISTRICT: " << station->getDistrict() << endl;
-    cout << "      -MUNICIPALITY: " << station->getMunicipality() << endl;
-    cout << "      -TOWNSHIP: " << station->getTownship() << endl;
-    cout << "      -LINE: " << station->getLine() << endl;
+    cout << "      -NAME: " << station.getName() << endl;
+    cout << "      -DISTRICT: " << station.getDistrict() << endl;
+    cout << "      -MUNICIPALITY: " << station.getMunicipality() << endl;
+    cout << "      -TOWNSHIP: " << station.getTownship() << endl;
+    cout << "      -LINE: " << station.getLine() << endl;
     cout << endl;
 }
 
@@ -89,7 +90,7 @@ void Menu::mainMenu() {
          << "|                   MAIN MENU                   |\n"
          << "|-----------------------------------------------|\n"
          << "| 1. STATIONS MENU                              |\n"
-         << "| 2. TRAINS MENU                                |\n"
+         << "| 2. MAX FLOW MENU                              |\n"
          << "| 3. EXIT                                       |\n"
          << "-------------------------------------------------\n";
 
@@ -276,9 +277,9 @@ void Menu::trainsMenu() {
 
     cleanTerminal();
     cout << "-------------------------------------------------\n"
-         << "|                  TRAINS MENU                  |\n"
+         << "|                 MAX FLOW MENU                 |\n"
          << "|-----------------------------------------------|\n"
-         << "| 1. SEARCH TRAIN                               |\n"
+         << "| 1. MAX FLOW BETWEEN 2 STATION                 |\n"
          << "| 2. GO BACK                                    |\n"
          << "-------------------------------------------------\n";
     while (true) {
@@ -287,7 +288,25 @@ void Menu::trainsMenu() {
         else cout << "   -INVALID OPTION" << endl;
     }
 
-    if (command == "1") { // Search Train
+    if (command == "1") { // Max Flow Between 2 Stations
+        string station1, station2;
+        while (true) {
+            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
+            if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
+            cout << "   -INVALID STATION" << endl;
+        }
+        while (true) {
+            cout << "   -ENTER STATION 2: "; getline(cin >> ws, station2);
+            if (utils.getGraph().getNodes().find(station2) != utils.getGraph().getNodes().end()) break;
+            cout << "   -INVALID STATION" << endl;
+        }
+
+        cout << endl;
+        cout << "MAX FLOW BETWEEN " << station1 << " AND " << station2 << ":\n";
+        cout << "   -MAX FLOW: " << utils.getGraph().edmondsKarp(utils.getGraph().getNodes().at(station1), utils.getGraph().getNodes().at(station2)) << endl;
+        cout << endl;
+
+        press0ToContinue();
 
     }
 

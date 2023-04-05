@@ -15,6 +15,13 @@ Graph Utils::getGraph() {
     return graph;
 }
 
+set<string> Utils::getDistricts() {
+    return districts;
+}
+set<string> Utils::getMunicipalities() {
+    return municipalities;
+}
+
 void Utils::readStations() {
 
     ifstream file("../dataset/stations.csv");
@@ -38,8 +45,12 @@ void Utils::readStations() {
 
             fields.push_back(field);
         }
-
         graph.addNode(fields[0], fields[1], fields[2], fields[3], fields[4]);
+
+        if (fields[1] == "" | fields[2] == "") continue;
+
+        districts.insert(fields[1]);
+        municipalities.insert(fields[2]);
     }
 }
 
@@ -68,4 +79,25 @@ void Utils::readNetwork() {
         }
         graph.addBidirectionalEdge(fields[0], fields[1], stoi(fields[2]), fields[3]);
     }
+}
+
+Graph Utils::filterGraph(bool distOrMun, const string& distMun) const {
+
+    Graph filteredGraph;
+
+    if (distOrMun) { // District
+
+        for (auto node: graph.getNodes()) {
+            filteredGraph.addNode(node.second);
+        }
+
+    }
+
+    else { // Municipality
+
+    }
+
+
+
+    return filteredGraph;
 }
