@@ -51,6 +51,7 @@ public:
     void addNode(Node* node);
     void addNode(const std::string& name, const std::string& district,const std::string& municipality, const std::string& township, const std::string& line);
 
+    Node* findNode(const std::string& name);
     /**
      * Add a Edge between Node first and second
      *

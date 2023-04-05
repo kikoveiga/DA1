@@ -19,12 +19,12 @@ private:
     std::set<std::string> municipalities;
 
 public:
-    explicit Utils();
+    explicit Utils(bool distOrMun = true, const std::string& distMun = "");
     Graph getGraph();
     std::set<std::string> getDistricts();
     std::set<std::string> getMunicipalities();
-    void readStations();
-    void readNetwork();
+    void readStations(bool distOrMun, const std::string& distMun);
+    void readNetwork(bool distOrMun, const std::string& distMun);
     Graph filterGraph(bool distOrMun, const std::string& distMun) const;
 };
 

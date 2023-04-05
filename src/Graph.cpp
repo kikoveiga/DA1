@@ -18,6 +18,10 @@ void Graph::addNode(const string& name, const string& district, const string& mu
     nodes[name] = node;
 }
 
+Graph::Node* Graph::findNode(const string& name) {
+    if (nodes.find(name) == nullptr) return nullptr;
+    return nodes[name];
+}
 void Graph::addBidirectionalEdge(const string& first, const string& second, int capacity, const string& service) {
 
     Node* firstNode = nodes[first];
@@ -195,3 +199,5 @@ int Graph::edmondsKarp(Node* source, Node* sink) {
 
     return maxFlow;
 }
+
+

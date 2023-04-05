@@ -22,7 +22,7 @@ public:
     void printStation(const std::string& name);
     void mainMenu();
     void stationsMenu();
-    void trainsMenu();
+    void maxFlowMenu();
     void cleanTerminal();
 
 };

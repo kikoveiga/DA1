@@ -61,7 +61,7 @@ void Menu::run() {
                 break;
 
             case 2:
-                trainsMenu();
+                maxFlowMenu();
                 break;
 
             case 3:
@@ -273,18 +273,20 @@ void Menu::stationsMenu() {
     command = "1";
 }
 
-void Menu::trainsMenu() {
+void Menu::maxFlowMenu() {
 
     cleanTerminal();
     cout << "-------------------------------------------------\n"
          << "|                 MAX FLOW MENU                 |\n"
          << "|-----------------------------------------------|\n"
          << "| 1. MAX FLOW BETWEEN 2 STATION                 |\n"
-         << "| 2. GO BACK                                    |\n"
+         << "| 2. TOP N DISTRICTS IN FLOW                    |\n"
+         << "| 3. TOP N MUNICIPALITIES IN FLOW               |\n"
+         << "| 4. GO BACK                                    |\n"
          << "-------------------------------------------------\n";
     while (true) {
         cout << "   -OPTION: "; getline(cin >> ws, command);
-        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 2) break;
+        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 4) break;
         else cout << "   -INVALID OPTION" << endl;
     }
 
@@ -310,9 +312,8 @@ void Menu::trainsMenu() {
 
     }
 
-    else if (command == "2") { // Go Back
-        command = "0";
-        return;
+    else if (command == "2") { // Top Municipalities
+        
     }
 }
 
