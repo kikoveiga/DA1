@@ -134,6 +134,10 @@ std::vector<Graph::FlowStations> Graph::getMaxFlowStations() {
 std::vector<Graph::FlowStations> Graph::getAllFlows() {
 
     vector<FlowStations> res;
+    if (nodes.size() == 1) {
+        for (auto& a : nodes)
+        res.push_back({0, a.first, a.first});
+    }
 
     for (auto& a : nodes) {
         for (auto &b: nodes) {
@@ -231,6 +235,72 @@ int Graph::edmondsKarp(Node* source, Node* sink) {
     }
 
     return maxFlow;
+}
+
+
+bool Graph::bfsFindCheapAugmentingPath(Node* source, Node* sink) {
+    setAllNodesUnvisited();
+    source->visited = true;
+
+    queue<Node*> queue;
+    queue.push(source);
+
+    while (!queue.empty() && !sink->visited) {
+        Node* node = queue.front();
+        queue.pop();
+        vector<Edge*> adjHelper = node->adj;
+        sort(adjHelper.begin(), adjHelper.end(), [](const Edge* edge1, const Edge* edge2) {
+            return edge1->cost < edge2->cost;
+        });
+        for (auto edge: node->adj) {
+            testAndVisit(queue, edge, edge->destination, edge->capacity - edge->flow);
+        }
+        vector<Edge*> incHelper = node->incoming;
+        sort(incHelper.begin(), incHelper.end(), [](const Edge* edge1, const Edge* edge2) {
+            return edge1->cost < edge2->cost;
+        });
+        for (auto edge: node->incoming) {
+            testAndVisit(queue, edge, edge->source, edge->flow);
+        }
+    }
+    return sink->visited;
+}
+
+void Graph::augmentFlowAlongPathCost(Node* source, Node* sink, int f, int& cost) {
+
+    for (auto next = sink; next != source; ) {
+
+        auto edge = next->path;
+        int flow = edge->flow;
+
+        if (edge->destination == next) {
+            edge->flow = flow + f;
+            next = edge->source;
+        }
+        else {
+            edge->flow = flow - f;
+            next = edge->destination;
+        }
+        cost += edge->cost;
+    }
+}
+
+pair<int, int> Graph::cheapEdmondsKarp(Node* source, Node* sink) {
+
+    int maxFlow = 0;
+    setAllFlows0();
+    int cost = 0;
+    int totalCost = 0;
+    // Loop to find augmentation paths
+    while (bfsFindCheapAugmentingPath(source, sink)) {
+        int flow = findMinResidualAlongPath(source, sink);
+        augmentFlowAlongPathCost(source, sink, flow, cost);
+        maxFlow += flow;
+        totalCost += (cost * flow);
+        cost = 0;
+    }
+
+    return {maxFlow, totalCost};
 }
 
 

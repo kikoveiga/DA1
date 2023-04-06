@@ -283,7 +283,8 @@ void Menu::maxFlowMenu() {
          << "| 2. TOP N DISTRICTS IN FLOW                    |\n"
          << "| 3. TOP N MUNICIPALITIES IN FLOW               |\n"
          << "| 4. TOP N MAX FLOWS                            |\n"
-         << "| 5. GO BACK                                    |\n"
+         << "| 5. MIN COST                                   |\n"
+         << "| 6. GO BACK                                    |\n"
          << "-------------------------------------------------\n";
     while (true) {
         cout << "   -OPTION: "; getline(cin >> ws, command);
@@ -393,7 +394,26 @@ void Menu::maxFlowMenu() {
         press0ToContinue();
     }
 
-    else if (command == "5") { // Go Back
+    else if (command == "5") {
+        string station1, station2;
+        while (true) {
+            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
+            if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
+            cout << "   -INVALID STATION" << endl;
+        }
+        while (true) {
+            cout << "   -ENTER STATION 2: "; getline(cin >> ws, station2);
+            if (utils.getGraph().getNodes().find(station2) != utils.getGraph().getNodes().end()) break;
+            cout << "   -INVALID STATION" << endl;
+        }
+
+        auto result = utils.getGraph().cheapEdmondsKarp(utils.getGraph().findNode(station1), utils.getGraph().findNode(station2));
+
+        cout << "number of trains: " << result.first << "  -> total cost:" << result.second << endl;
+
+    }
+
+    else if (command == "6") { // Go Back
             command = "0";
             return;
     }
