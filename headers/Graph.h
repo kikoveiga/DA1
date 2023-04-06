@@ -37,7 +37,6 @@ private:
         Edge* path = nullptr;
     };
 
-
     std::unordered_map<std::string, Node*> nodes;
 
 public:
@@ -83,7 +82,16 @@ public:
     void testAndVisit(std::queue<Node*>& queue, Edge* edge, Node* next, int residual);
 
 
-    std::pair<int, std::vector<std::pair<std::string, std::string>>> getMaxFlowStations();
+    struct FlowStations {
+        int flow;
+        std::string source;
+        std::string destination;
+    };
+
+    std::vector<FlowStations> getMaxFlowStations();
+    std::vector<FlowStations> getAllFlows();
+
+
 
 };
 #endif //DA1_GRAPH_H

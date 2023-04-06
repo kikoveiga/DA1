@@ -107,28 +107,48 @@ void Graph::dfs(Node* node) {
 }
 
 
-pair<int, vector<pair<string, string>>> Graph::getMaxFlowStations() {
-    int maxFlow = 0, flow = 0;
-    pair<int, vector<pair<string, string>>> res;
+std::vector<Graph::FlowStations> Graph::getMaxFlowStations() {
+    int maxFlow = 0;
+    vector<FlowStations> res;
 
     for (auto& a : nodes) {
         for (auto &b: nodes) {
 
             if (a.first >= b.first) continue;
 
-            flow = edmondsKarp(a.second, b.second);
+            int flow = edmondsKarp(a.second, b.second);
 
             if (flow < maxFlow) continue;
 
             if (flow > maxFlow) {
-                res.second.clear();
+                res.clear();
                 maxFlow = flow;
-                res.first = maxFlow;
             }
 
-            res.second.emplace_back(a.first, b.first);
+            res.push_back({flow, a.first, b.first});
         }
     }
+    return res;
+}
+
+std::vector<Graph::FlowStations> Graph::getAllFlows() {
+
+    vector<FlowStations> res;
+
+    for (auto& a : nodes) {
+        for (auto &b: nodes) {
+
+            if (a.first >= b.first) continue;
+
+            int flow = edmondsKarp(a.second, b.second);
+            res.push_back({flow, a.first, b.first});
+        }
+    }
+
+    sort(res.begin(), res.end(), [](const FlowStations& a, const FlowStations& b) {
+        return a.flow > b.flow;
+    });
+
     return res;
 }
 

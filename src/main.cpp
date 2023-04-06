@@ -9,14 +9,14 @@ using namespace std;
 
 void  func_test() {
 
-    Utils utils(true, "LISBOA");
+    Utils utils;
 
-    auto i = utils.getGraph().getMaxFlowStations();
-    cout << i.first << endl;
-
-    for (auto& j : i.second) {
-        cout << j.first << " -> " << j.second << endl;
-    }
+    auto todos = utils.getGraph().getAllFlows();
+    cout << utils.getGraph().getNodes().size() << endl;
+    cout << todos.size() << endl;
+    /*for (auto& flow: todos) {
+        cout << flow.flow << " " << flow.source << "->" << flow.destination << endl;
+    }*/
 }
 
 int main() {

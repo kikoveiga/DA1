@@ -282,11 +282,12 @@ void Menu::maxFlowMenu() {
          << "| 1. MAX FLOW BETWEEN 2 STATIONS                |\n"
          << "| 2. TOP N DISTRICTS IN FLOW                    |\n"
          << "| 3. TOP N MUNICIPALITIES IN FLOW               |\n"
-         << "| 4. GO BACK                                    |\n"
+         << "| 4. TOP N MAX FLOWS                            |\n"
+         << "| 5. GO BACK                                    |\n"
          << "-------------------------------------------------\n";
     while (true) {
         cout << "   -OPTION: "; getline(cin >> ws, command);
-        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 4) break;
+        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 5) break;
         else cout << "   -INVALID OPTION" << endl;
     }
 
@@ -314,32 +315,28 @@ void Menu::maxFlowMenu() {
 
     else if (command == "2") { // Top Districts
 
-        string n;
         while (true) {
-            cout << "   -ENTER N: "; getline(cin >> ws, n);
-            if (isNumber(n) && stoi(n) > 0) break;
+            cout << "   -ENTER N: "; getline(cin >> ws, command);
+            if (isNumber(command) && stoi(command) > 0) break;
             cout << "   -INVALID N" << endl;
         }
 
         cout << endl;
-        cout << "TOP " << n << " DISTRICT(S) IN FLOW:\n";
+        cout << "TOP " << command << " DISTRICT(S) IN FLOW:\n";
 
         vector<pair<int, string>> topDistricts;
-
-        int i = 0;
-
         set<std::string> districts = utils.getDistricts();
 
-        for (auto &district : districts) {
+        for (auto& district : districts) {
 
             Utils tempUtils(true, district);
-            topDistricts.emplace_back(tempUtils.getGraph().getMaxFlowStations().first, district);
+            auto maxFlowStations = tempUtils.getGraph().getMaxFlowStations();
 
-            i++;
+            if (!maxFlowStations.empty()) topDistricts.emplace_back(maxFlowStations[0].flow, district);
         }
 
         sort(topDistricts.begin(), topDistricts.end(), greater<>());
-        for (int i = 0; i < stoi(n) & i < topDistricts.size(); i++) {
+        for (int i = 0; i < stoi(command) & i < topDistricts.size(); i++) {
             cout << "   [" << i + 1 << "] " << topDistricts[i].second << " - " << topDistricts[i].first << endl;
         }
 
@@ -348,33 +345,29 @@ void Menu::maxFlowMenu() {
 
     else if (command == "3") { // Top Municipalities
 
-        string n;
         while (true) {
             cout << "   -ENTER N: ";
-            getline(cin >> ws, n);
-            if (isNumber(n) && stoi(n) > 0) break;
+            getline(cin >> ws, command);
+            if (isNumber(command) && stoi(command) > 0) break;
             cout << "   -INVALID N" << endl;
         }
 
         cout << endl;
-        cout << "TOP " << n << " MUNICIPALITIES IN FLOW:\n";
+        cout << "TOP " << command << " MUNICIPALITIES IN FLOW:\n";
 
         vector<pair<int, string>> topMunicipalities;
-
-        int i = 0;
-
         set<std::string> municipalities = utils.getMunicipalities();
 
         for (auto &municipality: municipalities) {
 
             Utils tempUtils(false, municipality);
-            topMunicipalities.emplace_back(tempUtils.getGraph().getMaxFlowStations().first, municipality);
+            auto maxFlowStations = tempUtils.getGraph().getMaxFlowStations();
 
-            i++;
+            if (!maxFlowStations.empty()) topMunicipalities.emplace_back(tempUtils.getGraph().getMaxFlowStations()[0].flow, municipality);
         }
 
         sort(topMunicipalities.begin(), topMunicipalities.end(), greater<>());
-        for (int i = 0; i < stoi(n) & i < topMunicipalities.size(); i++) {
+        for (int i = 0; i < stoi(command) & i < topMunicipalities.size(); i++) {
             cout << "   [" << i + 1 << "] " << topMunicipalities[i].second << " - " << topMunicipalities[i].first
                  << endl;
         }
@@ -382,7 +375,25 @@ void Menu::maxFlowMenu() {
         press0ToContinue();
     }
 
-    else if (command == "4") { // Go Back
+    else if (command == "4") { // Top N Max Flows
+
+        while (true) {
+            cout << "   -ENTER N: ";
+            getline(cin >> ws, command);
+            if (isNumber(command) && stoi(command) > 0) break;
+            cout << "   -INVALID N" << endl;
+        }
+
+        auto result = utils.getGraph().getAllFlows();
+
+        for (int i = 0; i < stoi(command) && i < result.size(); i++) {
+            cout << "   [" << i + 1 << "] " << result[i].source << " -> " << result[i].destination << " - " << result[i].flow << endl;
+        }
+
+        press0ToContinue();
+    }
+
+    else if (command == "5") { // Go Back
             command = "0";
             return;
     }
