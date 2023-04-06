@@ -71,6 +71,8 @@ public:
     std::vector<std::string> getStationsInTownship(const std::string& township) const;
     std::vector<std::string> getStationsInLine(const std::string& line) const;
 
+    void removeEdge(Node* station1, Node* station2);
+
     void setAllNodesUnvisited();
     void setAllFlows0();
 
@@ -98,5 +100,7 @@ public:
     void augmentFlowAlongPathCost(Node* source, Node* sink, int f, int& cost);
 
     std::pair<int,int> cheapEdmondsKarp(Node* source, Node* sink);
+
+    int maxAffluence(Node* station);
 };
 #endif //DA1_GRAPH_H

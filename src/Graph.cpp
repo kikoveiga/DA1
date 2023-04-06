@@ -18,6 +18,8 @@ void Graph::addNode(const string& name, const string& district, const string& mu
     nodes[name] = node;
 }
 
+
+
 Graph::Node* Graph::findNode(const string& name) {
     if (nodes.find(name) == nullptr) return nullptr;
     return nodes[name];
@@ -36,6 +38,39 @@ void Graph::addBidirectionalEdge(const string& first, const string& second, int 
     firstNode->incoming.push_back(secondEdge);
     secondNode->incoming.push_back(firstEdge);
 }
+
+void Graph::removeEdge(Graph::Node *station1, Graph::Node *station2) {
+    Edge* edgeToRemove = nullptr;
+    for (auto it = station1->adj.begin(); it != station1->adj.end(); ++it) {
+        if ((*it)->destination->station.getName() == station2->station.getName()) {
+            edgeToRemove = *it;
+            station1->adj.erase(it);
+            break;
+        }
+    }
+    for (auto it = station1->incoming.begin(); it != station1->incoming.end(); ++it) {
+        if ((*it)->source->station.getName() == station2->station.getName()) {
+            edgeToRemove = *it;
+            station1->incoming.erase(it);
+            break;
+        }
+    }
+    for (auto it = station2->adj.begin(); it != station2->adj.end(); ++it) {
+        if ((*it)->destination->station.getName() == station1->station.getName()) {
+            edgeToRemove = *it;
+            station2->adj.erase(it);
+            break;
+        }
+    }
+    for (auto it = station2->incoming.begin(); it != station2->incoming.end(); ++it) {
+        if ((*it)->source->station.getName() == station1->station.getName()) {
+            edgeToRemove = *it;
+            station1->incoming.erase(it);
+            break;
+        }
+    }
+}
+
 
 const unordered_map<string, Graph::Node*>& Graph::getNodes() const {
     return nodes;
@@ -291,6 +326,7 @@ pair<int, int> Graph::cheapEdmondsKarp(Node* source, Node* sink) {
     setAllFlows0();
     int cost = 0;
     int totalCost = 0;
+    int lastFlow;
     // Loop to find augmentation paths
     while (bfsFindCheapAugmentingPath(source, sink)) {
         int flow = findMinResidualAlongPath(source, sink);
@@ -301,6 +337,25 @@ pair<int, int> Graph::cheapEdmondsKarp(Node* source, Node* sink) {
     }
 
     return {maxFlow, totalCost};
+}
+
+int Graph::maxAffluence(Node* sink) {
+    vector<Node*> sources;
+    for (auto& node : nodes) {
+        if (node.second->adj.size() == 1)
+            sources.push_back(node.second);
+    }
+    addNode("super", " ", "  ", " ", " ");
+    auto superNode = nodes["super"];
+    for (auto& node : sources) {
+        addBidirectionalEdge("super", node->station.getName(), INT32_MAX, "STANDARD");
+    }
+    int affluence = edmondsKarp(superNode, sink);
+    for (auto& node : sources) {
+        node->incoming.pop_back();
+        node->adj.pop_back();
+    }
+    return affluence;
 }
 
 

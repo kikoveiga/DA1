@@ -283,12 +283,13 @@ void Menu::maxFlowMenu() {
          << "| 2. TOP N DISTRICTS IN FLOW                    |\n"
          << "| 3. TOP N MUNICIPALITIES IN FLOW               |\n"
          << "| 4. TOP N MAX FLOWS                            |\n"
-         << "| 5. MIN COST                                   |\n"
-         << "| 6. GO BACK                                    |\n"
+         << "| 5. MAX AFFLUENCE                              |\n"
+         << "| 6. MIN COST                                   |\n"
+         << "| 7. GO BACK                                    |\n"
          << "-------------------------------------------------\n";
     while (true) {
         cout << "   -OPTION: "; getline(cin >> ws, command);
-        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 5) break;
+        if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 7) break;
         else cout << "   -INVALID OPTION" << endl;
     }
 
@@ -395,6 +396,18 @@ void Menu::maxFlowMenu() {
     }
 
     else if (command == "5") {
+        string station1;
+        while (true) {
+            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
+            if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
+            cout << "   -INVALID STATION" << endl;
+        }
+        auto result = utils.getGraph().maxAffluence(utils.getGraph().findNode(station1));
+        cout << "Max Affluence at " << station1 << ": " << result << " trains.\n";
+        press0ToContinue();
+    }
+
+    else if (command == "6") {
         string station1, station2;
         while (true) {
             cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
@@ -410,10 +423,10 @@ void Menu::maxFlowMenu() {
         auto result = utils.getGraph().cheapEdmondsKarp(utils.getGraph().findNode(station1), utils.getGraph().findNode(station2));
 
         cout << "number of trains: " << result.first << "  -> total cost:" << result.second << endl;
-
+        press0ToContinue();
     }
 
-    else if (command == "6") { // Go Back
+    else if (command == "7") { // Go Back
             command = "0";
             return;
     }
