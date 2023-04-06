@@ -95,10 +95,22 @@ void Graph::setAllFlows0() {
     }
 }
 
+void Graph::dfs(Node* node) {
 
-vector<pair<pair<string, string>, int>> Graph::getMaxFlowStations() {
+    node->visited = true;
+
+    for (auto next : node->adj) {
+        if (!next->destination->visited) {
+            dfs(next->destination);
+        }
+    }
+}
+
+
+pair<int, vector<pair<string, string>>> Graph::getMaxFlowStations() {
     int maxFlow = 0, flow = 0;
-    vector<pair<pair<string, string>, int>> res;
+    pair<int, vector<pair<string, string>>> res;
+
     for (auto& a : nodes) {
         for (auto &b: nodes) {
 
@@ -109,11 +121,12 @@ vector<pair<pair<string, string>, int>> Graph::getMaxFlowStations() {
             if (flow < maxFlow) continue;
 
             if (flow > maxFlow) {
-                res.clear();
+                res.second.clear();
                 maxFlow = flow;
+                res.first = maxFlow;
             }
-            res.push_back({{a.first, b.first}, flow});
 
+            res.second.emplace_back(a.first, b.first);
         }
     }
     return res;

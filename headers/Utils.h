@@ -24,8 +24,7 @@ public:
     std::set<std::string> getDistricts();
     std::set<std::string> getMunicipalities();
     void readStations(bool distOrMun, const std::string& distMun);
-    void readNetwork(bool distOrMun, const std::string& distMun);
-    Graph filterGraph(bool distOrMun, const std::string& distMun) const;
+    void readNetwork(const std::string& distMun);
 };
 
 #endif //DA1_UTILS_H

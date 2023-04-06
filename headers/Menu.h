@@ -23,7 +23,7 @@ public:
     void mainMenu();
     void stationsMenu();
     void maxFlowMenu();
-    void cleanTerminal();
+    static void cleanTerminal();
 
 };
 

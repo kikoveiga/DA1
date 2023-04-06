@@ -72,6 +72,8 @@ public:
     void setAllNodesUnvisited();
     void setAllFlows0();
 
+    void dfs(Node* node);
+
     bool bfs(std::unordered_map<std::string, std::pair<std::string, unsigned>>& parent, std::string source, std::string sink);
 
     int edmondsKarp(Node* source, Node* sink);
@@ -81,7 +83,7 @@ public:
     void testAndVisit(std::queue<Node*>& queue, Edge* edge, Node* next, int residual);
 
 
-    std::vector<std::pair<std::pair<std::string, std::string>, int>> getMaxFlowStations();
+    std::pair<int, std::vector<std::pair<std::string, std::string>>> getMaxFlowStations();
 
 };
 #endif //DA1_GRAPH_H

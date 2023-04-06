@@ -1,8 +1,6 @@
 //
 // Created by kikoveiga on 14-03-2023.
 //
-#define STATIONS_FILE "../dataset/stations.csv"
-#define NETWORK_FILE "../dataset/network.csv"
 
 #include "../headers/Utils.h"
 
@@ -10,7 +8,7 @@ using namespace std;
 
 Utils::Utils(bool distOrMun, const string& distMun) {
     readStations(distOrMun, distMun);
-    readNetwork(distOrMun, distMun);
+    readNetwork(distMun);
 }
 
 Graph Utils::getGraph() {
@@ -47,19 +45,18 @@ void Utils::readStations(bool distOrMun, const string& distMun) {
 
             fields.push_back(field);
         }
+        if (fields[1].empty() && fields[2].empty()) continue;
 
-        if (distMun == "" || (distOrMun && distMun == fields[1]) || (!distOrMun && distMun == fields[2])) {
+
+        if (distMun.empty() || (distOrMun && distMun == fields[1]) || (!distOrMun && distMun == fields[2])) {
             graph.addNode(fields[0], fields[1], fields[2], fields[3], fields[4]);
+            districts.insert(fields[1]);
+            municipalities.insert(fields[2]);
         }
-
-        if (fields[1] == "" | fields[2] == "") continue;
-
-        districts.insert(fields[1]);
-        municipalities.insert(fields[2]);
     }
 }
 
-void Utils::readNetwork(bool distOrMun, const std::string& distMun) {
+void Utils::readNetwork(const string& distMun) {
 
         ifstream file("../dataset/network.csv");
         string line;
@@ -83,7 +80,7 @@ void Utils::readNetwork(bool distOrMun, const std::string& distMun) {
                 fields.push_back(field);
             }
 
-            if (distMun == "" || (graph.findNode(fields[0]) != nullptr && graph.findNode(fields[1]) != nullptr)) {
+            if (distMun.empty() || (graph.findNode(fields[0]) != nullptr && graph.findNode(fields[1]) != nullptr)) {
                 graph.addBidirectionalEdge(fields[0], fields[1], stoi(fields[2]), fields[3]);
             }
         }

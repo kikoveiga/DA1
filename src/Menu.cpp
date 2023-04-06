@@ -279,7 +279,7 @@ void Menu::maxFlowMenu() {
     cout << "-------------------------------------------------\n"
          << "|                 MAX FLOW MENU                 |\n"
          << "|-----------------------------------------------|\n"
-         << "| 1. MAX FLOW BETWEEN 2 STATION                 |\n"
+         << "| 1. MAX FLOW BETWEEN 2 STATIONS                |\n"
          << "| 2. TOP N DISTRICTS IN FLOW                    |\n"
          << "| 3. TOP N MUNICIPALITIES IN FLOW               |\n"
          << "| 4. GO BACK                                    |\n"
@@ -312,9 +312,82 @@ void Menu::maxFlowMenu() {
 
     }
 
-    else if (command == "2") { // Top Municipalities
-        
+    else if (command == "2") { // Top Districts
+
+        string n;
+        while (true) {
+            cout << "   -ENTER N: "; getline(cin >> ws, n);
+            if (isNumber(n) && stoi(n) > 0) break;
+            cout << "   -INVALID N" << endl;
+        }
+
+        cout << endl;
+        cout << "TOP " << n << " DISTRICT(S) IN FLOW:\n";
+
+        vector<pair<int, string>> topDistricts;
+
+        int i = 0;
+
+        set<std::string> districts = utils.getDistricts();
+
+        for (auto &district : districts) {
+
+            Utils tempUtils(true, district);
+            topDistricts.emplace_back(tempUtils.getGraph().getMaxFlowStations().first, district);
+
+            i++;
+        }
+
+        sort(topDistricts.begin(), topDistricts.end(), greater<>());
+        for (int i = 0; i < stoi(n) & i < topDistricts.size(); i++) {
+            cout << "   [" << i + 1 << "] " << topDistricts[i].second << " - " << topDistricts[i].first << endl;
+        }
+
+        press0ToContinue();
     }
+
+    else if (command == "3") { // Top Municipalities
+
+        string n;
+        while (true) {
+            cout << "   -ENTER N: ";
+            getline(cin >> ws, n);
+            if (isNumber(n) && stoi(n) > 0) break;
+            cout << "   -INVALID N" << endl;
+        }
+
+        cout << endl;
+        cout << "TOP " << n << " MUNICIPALITIES IN FLOW:\n";
+
+        vector<pair<int, string>> topMunicipalities;
+
+        int i = 0;
+
+        set<std::string> municipalities = utils.getMunicipalities();
+
+        for (auto &municipality: municipalities) {
+
+            Utils tempUtils(false, municipality);
+            topMunicipalities.emplace_back(tempUtils.getGraph().getMaxFlowStations().first, municipality);
+
+            i++;
+        }
+
+        sort(topMunicipalities.begin(), topMunicipalities.end(), greater<>());
+        for (int i = 0; i < stoi(n) & i < topMunicipalities.size(); i++) {
+            cout << "   [" << i + 1 << "] " << topMunicipalities[i].second << " - " << topMunicipalities[i].first
+                 << endl;
+        }
+
+        press0ToContinue();
+    }
+
+    else if (command == "4") { // Go Back
+            command = "0";
+            return;
+    }
+
+    command = "2";
 }
 
 

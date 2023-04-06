@@ -8,20 +8,20 @@
 using namespace std;
 
 void  func_test() {
-    Utils utils(true, "AVEIRO");
-    auto nigga = utils.getGraph().getNodes();
-    cout << nigga.size();
 
-    for (auto node : nigga) {
-        cout << node.second->station.getName() << ", ";
+    Utils utils(true, "LISBOA");
+
+    auto i = utils.getGraph().getMaxFlowStations();
+    cout << i.first << endl;
+
+    for (auto& j : i.second) {
+        cout << j.first << " -> " << j.second << endl;
     }
-
-
 }
 
 int main() {
 
-    func_test();
+    //func_test();
 
-    //Menu menu;
+    Menu menu;
 }
