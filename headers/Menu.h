@@ -14,7 +14,7 @@ class Menu {
 private:
     Utils utils;
     std::string command;
-
+    std::vector<std::pair<std::string, std::string>> edges;
 public:
     explicit Menu();
     void run();
@@ -23,8 +23,9 @@ public:
     void mainMenu();
     void stationsMenu();
     void maxFlowMenu();
+    void reducedConMenu();
     static void cleanTerminal();
-
+    void changeEdges();
 };
 
 #endif //DA1_MENU_H

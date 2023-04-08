@@ -40,35 +40,36 @@ void Graph::addBidirectionalEdge(const string& first, const string& second, int 
 }
 
 void Graph::removeEdge(Graph::Node *station1, Graph::Node *station2) {
-    Edge* edgeToRemove = nullptr;
-    for (auto it = station1->adj.begin(); it != station1->adj.end(); ++it) {
-        if ((*it)->destination->station.getName() == station2->station.getName()) {
-            edgeToRemove = *it;
-            station1->adj.erase(it);
-            break;
-        }
+    vector<Edge*> helper = {};
+    for (auto& edge : station1->adj) {
+        if (edge->destination != station2)
+            continue;
+        helper.push_back(edge);
     }
-    for (auto it = station1->incoming.begin(); it != station1->incoming.end(); ++it) {
-        if ((*it)->source->station.getName() == station2->station.getName()) {
-            edgeToRemove = *it;
-            station1->incoming.erase(it);
-            break;
-        }
+    station1->adj = helper;
+    helper = {};
+    for (auto& edge : station2->adj) {
+        if (edge->destination != station1)
+            continue;
+        helper.push_back(edge);
     }
-    for (auto it = station2->adj.begin(); it != station2->adj.end(); ++it) {
-        if ((*it)->destination->station.getName() == station1->station.getName()) {
-            edgeToRemove = *it;
-            station2->adj.erase(it);
-            break;
-        }
+    station2->adj = helper;
+    helper = {};
+
+    for (auto& edge : station1->incoming) {
+        if (edge->source != station2)
+            continue;
+        helper.push_back(edge);
     }
-    for (auto it = station2->incoming.begin(); it != station2->incoming.end(); ++it) {
-        if ((*it)->source->station.getName() == station1->station.getName()) {
-            edgeToRemove = *it;
-            station1->incoming.erase(it);
-            break;
-        }
+    station1->incoming = helper;
+    helper = {};
+
+    for (auto& edge : station2->incoming) {
+        if (edge->source != station1)
+            continue;
+        helper.push_back(edge);
     }
+    station2->incoming = helper;
 }
 
 
@@ -355,7 +356,15 @@ int Graph::maxAffluence(Node* sink) {
         node->incoming.pop_back();
         node->adj.pop_back();
     }
+    nodes.erase("super");
     return affluence;
 }
 
+bool Graph::isAdjacent(Graph::Node *station1, Graph::Node *station2) {
 
+    for (const auto& edge : station1->adj)
+        if (edge->destination == station2)
+            return true;
+
+    return false;
+}

@@ -83,6 +83,14 @@ void Utils::readNetwork(const string& distMun) {
             if (distMun.empty() || (graph.findNode(fields[0]) != nullptr && graph.findNode(fields[1]) != nullptr)) {
                 graph.addBidirectionalEdge(fields[0], fields[1], stoi(fields[2]), fields[3]);
             }
+            edges.insert({fields[0], fields[1]});
         }
 }
 
+void Utils::removeEdge(const pair<string, string> &edge) {
+    edges.erase(edge);
+}
+
+std::set<std::pair<std::string, std::string>> Utils::getEdges() {
+    return edges;
+}

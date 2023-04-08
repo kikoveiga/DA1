@@ -102,5 +102,7 @@ public:
     std::pair<int,int> cheapEdmondsKarp(Node* source, Node* sink);
 
     int maxAffluence(Node* station);
+
+    bool isAdjacent(Node* station1, Node* station2);
 };
 #endif //DA1_GRAPH_H
