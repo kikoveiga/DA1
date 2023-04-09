@@ -36,33 +36,18 @@ private:
         std::vector<Edge*> incoming;
         bool visited = false;
         Edge* path = nullptr;
-
+        int distanceDijkstra;
     };
 
     std::unordered_map<std::string, Node*> nodes;
 
 public:
+
     explicit Graph();
-
-    /**
-     * Add a Node to the Graph
-     * Complexity = O(n)
-     */
-
 
     void addNode(Node* node);
     void addNode(const std::string& name, const std::string& district,const std::string& municipality, const std::string& township, const std::string& line);
-
     Node* findNode(const std::string& name);
-    /**
-     * Add a Edge between Node first and second
-     *
-     * @param first
-     * @param second
-     * @param capacity
-     * @param service
-     *  Complexity = O()
-     */ // falta complexidade
     void addBidirectionalEdge(const std::string& first, const std::string& second, int capacity, const std::string& service);
 
     const std::unordered_map<std::string, Node*>& getNodes() const;
@@ -71,7 +56,10 @@ public:
     std::vector<std::string> getStationsInTownship(const std::string& township) const;
     std::vector<std::string> getStationsInLine(const std::string& line) const;
 
+    Edge* findEdge(Node* source, Node* destination);
     void removeEdge(Node* station1, Node* station2);
+    void removeEdge(Edge* edge, std::vector<Edge*>& edges);
+    void removeBidirectionalEdge(Node* station1, Node* station2);
 
     void setAllNodesUnvisited();
     void setAllFlows0();
@@ -95,6 +83,9 @@ public:
 
     std::vector<FlowStations> getMaxFlowStations();
     std::vector<FlowStations> getAllFlows();
+
+    int dijkstra(Node* source, Node* target);
+    static bool compareDijkstra(Node* node1, Node* node2);
 
     bool bfsFindCheapAugmentingPath(Node* source, Node* sink);
     void augmentFlowAlongPathCost(Node* source, Node* sink, int f, int& cost);

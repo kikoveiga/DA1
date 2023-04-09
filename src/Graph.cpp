@@ -2,6 +2,7 @@
 // Created by kikoveiga on 14-03-2023.
 //
 
+#include <functional>
 #include "../headers/Graph.h"
 
 using namespace std;
@@ -115,6 +116,33 @@ vector<string> Graph::getStationsInLine(const string& line) const {
         }
     }
     return stations;
+}
+
+Graph::Edge* Graph::findEdge(Node* source, Node* destination) {
+    for (auto edge : source->adj) {
+        if (edge->destination == destination) return edge;
+    }
+    return nullptr;
+}
+
+void Graph::removeEdge(Edge* edge, vector<Edge*>& edges) {
+    for (auto it = edges.begin(); it != edges.end(); it++) {
+        if ((*it)->destination->station.getName() == edge->destination->station.getName()) {
+            edges.erase(it);
+            break;
+        }
+    }
+}
+
+void Graph::removeBidirectionalEdge(Graph::Node* station1, Graph::Node* station2) {
+
+    Edge* edge1 = findEdge(station1, station2);
+    Edge* edge2 = findEdge(station2, station1);
+
+    removeEdge(edge1, station1->adj);
+    removeEdge(edge1, station2->incoming);
+    removeEdge(edge2, station2->adj);
+    removeEdge(edge2, station1->incoming);
 }
 
 void Graph::setAllNodesUnvisited() {
@@ -367,4 +395,38 @@ bool Graph::isAdjacent(Graph::Node *station1, Graph::Node *station2) {
             return true;
 
     return false;
+}
+
+bool Graph::compareDijkstra(Node* node1, Node* node2) {
+    return node1->distanceDijkstra < node2->distanceDijkstra;
+}
+
+int Graph::dijkstra(Graph::Node* source, Graph::Node* target) {
+
+    for (auto& node : nodes) {
+        node.second->path = nullptr;
+        node.second->distanceDijkstra = INT32_MAX;
+    }
+
+    priority_queue<Node*, vector<Node*>, function<bool(Node*, Node*)>> queue(compareDijkstra);
+    queue.push(source);
+    source->distanceDijkstra = 0;
+
+    while (!queue.empty()) {
+
+        Node* node = queue.top();
+        if (node == target) break;
+        queue.pop();
+
+        for (auto edge: node->adj) {
+
+            int newDistance = node->distanceDijkstra + edge->cost;
+            if (newDistance < edge->destination->distanceDijkstra) {
+                edge->destination->distanceDijkstra = newDistance;
+                edge->destination->path = edge;
+                queue.push(edge->destination);
+            }
+        }
+    }
+    return target->distanceDijkstra;
 }

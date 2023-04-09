@@ -119,6 +119,7 @@ void Menu::stationsMenu() {
          << "| 6. STATIONS FROM LINE                         |\n"
          << "| 7. GO BACK                                    |\n"
          << "-------------------------------------------------\n";
+
     while (true) {
         cout << "   -OPTION: "; getline(cin >> ws, command);
         if (isNumber(command) && 1 <= stoi(command) && stoi(command) <= 7) break;
@@ -127,14 +128,13 @@ void Menu::stationsMenu() {
 
     if (command == "1") { // Search Station
 
-        string name;
         while (true) {
-            cout << "   -ENTER STATION NAME: "; getline(cin >> ws, name);
-            if (utils.getGraph().getNodes().find(name) != utils.getGraph().getNodes().end()) break;
+            cout << "   -ENTER STATION NAME: "; getline(cin >> ws, command);
+            if (utils.getGraph().findNode(command) != nullptr) break;
             cout << "   -STATION NOT FOUND" << endl;
         }
 
-        printStation(name);
+        printStation(command);
         press0ToContinue();
     }
 
@@ -147,17 +147,17 @@ void Menu::stationsMenu() {
     }
 
     else if (command == "3") { // Stations from District
-        string district;
+
         while (true) {
-            cout << "   -ENTER DISTRICT: "; getline(cin >> ws, district);
-            if (!utils.getGraph().getStationsInDistrict(toUpper(district)).empty()) break;
+            cout << "   -ENTER DISTRICT: "; getline(cin >> ws, command);
+            if (!utils.getGraph().getStationsInDistrict(toUpper(command)).empty()) break;
             cout << "   -INVALID DISTRICT" << endl;
         }
 
-        vector<string> stationsInDistrict = utils.getGraph().getStationsInDistrict(district);
+        vector<string> stationsInDistrict = utils.getGraph().getStationsInDistrict(command);
 
         cout << endl;
-        cout << "STATIONS FROM DISTRICT " << district << ":\n";
+        cout << "STATIONS FROM DISTRICT " << command << ":\n";
 
         for (int i = 0; i < stationsInDistrict.size(); i++) {
             cout << "   [" << i + 1 << "] " << stationsInDistrict.at(i) << endl;
@@ -178,17 +178,17 @@ void Menu::stationsMenu() {
     }
 
     else if (command == "4") { // Stations from Municipality
-        string municipality;
+
         while (true) {
-            cout << "   -ENTER MUNICIPALITY: "; getline(cin >> ws, municipality);
-            if (!utils.getGraph().getStationsInMunicipality(toUpper(municipality)).empty()) break;
+            cout << "   -ENTER MUNICIPALITY: "; getline(cin >> ws, command);
+            if (!utils.getGraph().getStationsInMunicipality(toUpper(command)).empty()) break;
             cout << "   -INVALID MUNICIPALITY" << endl;
         }
 
-        vector<string> stationsInMunicipality = utils.getGraph().getStationsInMunicipality(municipality);
+        vector<string> stationsInMunicipality = utils.getGraph().getStationsInMunicipality(command);
 
         cout << endl;
-        cout << "STATIONS FROM MUNICIPALITY " << municipality << ":\n";
+        cout << "STATIONS FROM MUNICIPALITY " << command << ":\n";
 
         for (int i = 0; i < stationsInMunicipality.size(); i++) {
             cout << "   [" << i + 1 << "] " << stationsInMunicipality.at(i) << endl;
@@ -209,17 +209,17 @@ void Menu::stationsMenu() {
     }
 
     else if (command == "5") { // Stations from Township
-        string township;
+
         while (true) {
-            cout << "   -ENTER TOWNSHIP: "; getline(cin >> ws, township);
-            if (!utils.getGraph().getStationsInTownship(township).empty()) break;
+            cout << "   -ENTER TOWNSHIP: "; getline(cin >> ws, command);
+            if (!utils.getGraph().getStationsInTownship(command).empty()) break;
             cout << "   -INVALID TOWNSHIP" << endl;
         }
 
-        vector<string> stationsInTownship = utils.getGraph().getStationsInTownship(township);
+        vector<string> stationsInTownship = utils.getGraph().getStationsInTownship(command);
 
         cout << endl;
-        cout << "STATIONS FROM TOWNSHIP " << township << ":\n";
+        cout << "STATIONS FROM TOWNSHIP " << command << ":\n";
 
         for (int i = 0; i < stationsInTownship.size(); i++) {
             cout << "   [" << i + 1 << "] " << stationsInTownship.at(i) << endl;
@@ -240,17 +240,17 @@ void Menu::stationsMenu() {
     }
 
     else if (command == "6") { // Stations from Line
-        string line;
+
         while (true) {
-            cout << "   -ENTER LINE: "; getline(cin >> ws, line);
-            if (!utils.getGraph().getStationsInLine(line).empty()) break;
+            cout << "   -ENTER LINE: "; getline(cin >> ws, command);
+            if (!utils.getGraph().getStationsInLine(command).empty()) break;
             cout << "   -INVALID LINE" << endl;
         }
 
-        vector<string> stationsInLine = utils.getGraph().getStationsInLine(line);
+        vector<string> stationsInLine = utils.getGraph().getStationsInLine(command);
 
         cout << endl;
-        cout << "STATIONS FROM LINE " << line << ":\n";
+        cout << "STATIONS FROM LINE " << command << ":\n";
 
         for (int i = 0; i < stationsInLine.size(); i++) {
             cout << "   [" << i + 1 << "] " << stationsInLine.at(i) << endl;
@@ -274,37 +274,6 @@ void Menu::stationsMenu() {
         command = "0";
         return;
     }
-//
-// Created by kikoveiga on 14-03-2023.
-//
-
-#ifndef DA1_MENU_H
-#define DA1_MENU_H
-
-#include "Utils.h"
-#include <iostream>
-#include <algorithm>
-
-class Menu {
-
-private:
-    Utils utils;
-    std::string command;
-    std::vector<std::string> edges
-public:
-    explicit Menu();
-    void run();
-    void press0ToContinue();
-    void printStation(const std::string& name);
-    void mainMenu();
-    void stationsMenu();
-    void maxFlowMenu();
-    void reducedConMenu();
-    static void cleanTerminal();
-
-};
-
-#endif //DA1_MENU_H
 
     command = "1";
 }
@@ -330,21 +299,21 @@ void Menu::maxFlowMenu() {
     }
 
     if (command == "1") { // Max Flow Between 2 Stations
-        string station1, station2;
+        string station2;
         while (true) {
-            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
-            if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
+            cout << "   -ENTER STATION 1: "; getline(cin >> ws, command);
+            if (utils.getGraph().findNode(command) != nullptr) break;
             cout << "   -INVALID STATION" << endl;
         }
         while (true) {
             cout << "   -ENTER STATION 2: "; getline(cin >> ws, station2);
-            if (utils.getGraph().getNodes().find(station2) != utils.getGraph().getNodes().end()) break;
+            if (utils.getGraph().findNode(station2) != nullptr) break;
             cout << "   -INVALID STATION" << endl;
         }
 
         cout << endl;
-        cout << "MAX FLOW BETWEEN " << station1 << " AND " << station2 << ":\n";
-        cout << "   -MAX FLOW: " << utils.getGraph().edmondsKarp(utils.getGraph().getNodes().at(station1), utils.getGraph().getNodes().at(station2)) << endl;
+        cout << "MAX FLOW BETWEEN " << command << " AND " << station2 << ":\n";
+        cout << "   -MAX FLOW: " << utils.getGraph().edmondsKarp(utils.getGraph().findNode(command), utils.getGraph().findNode(station2)) << endl;
         cout << endl;
 
         press0ToContinue();
@@ -384,8 +353,7 @@ void Menu::maxFlowMenu() {
     else if (command == "3") { // Top Municipalities
 
         while (true) {
-            cout << "   -ENTER N: ";
-            getline(cin >> ws, command);
+            cout << "   -ENTER N: "; getline(cin >> ws, command);
             if (isNumber(command) && stoi(command) > 0) break;
             cout << "   -INVALID N" << endl;
         }
@@ -416,8 +384,7 @@ void Menu::maxFlowMenu() {
     else if (command == "4") { // Top N Max Flows
 
         while (true) {
-            cout << "   -ENTER N: ";
-            getline(cin >> ws, command);
+            cout << "   -ENTER N: "; getline(cin >> ws, command);
             if (isNumber(command) && stoi(command) > 0) break;
             cout << "   -INVALID N" << endl;
         }
@@ -431,32 +398,32 @@ void Menu::maxFlowMenu() {
         press0ToContinue();
     }
 
-    else if (command == "5") {
-        string station1;
+    else if (command == "5") { // Max Affluence
+
         while (true) {
-            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
-            if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
+            cout << "   -ENTER STATION: "; getline(cin >> ws, command);
+            if (utils.getGraph().findNode(command) != nullptr) break;
             cout << "   -INVALID STATION" << endl;
         }
-        auto result = utils.getGraph().maxAffluence(utils.getGraph().findNode(station1));
-        cout << "Max Affluence at " << station1 << ": " << result << " trains.\n";
+        auto result = utils.getGraph().maxAffluence(utils.getGraph().findNode(command));
+        cout << "Max Affluence at " << command << ": " << result << " trains.\n";
         press0ToContinue();
     }
 
-    else if (command == "6") {
-        string station1, station2;
+    else if (command == "6") { // Min Cost
+        string station2;
         while (true) {
-            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
-            if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
+            cout << "   -ENTER STATION 1: "; getline(cin >> ws, command);
+            if (utils.getGraph().findNode(command) != nullptr) break;
             cout << "   -INVALID STATION" << endl;
         }
         while (true) {
             cout << "   -ENTER STATION 2: "; getline(cin >> ws, station2);
-            if (utils.getGraph().getNodes().find(station2) != utils.getGraph().getNodes().end()) break;
+            if (utils.getGraph().findNode(station2) != nullptr) break;
             cout << "   -INVALID STATION" << endl;
         }
 
-        auto result = utils.getGraph().cheapEdmondsKarp(utils.getGraph().findNode(station1), utils.getGraph().findNode(station2));
+        auto result = utils.getGraph().cheapEdmondsKarp(utils.getGraph().findNode(command), utils.getGraph().findNode(station2));
 
         cout << "number of trains: " << result.first << "  -> total cost:" << result.second << endl;
         press0ToContinue();
@@ -499,21 +466,24 @@ void Menu::reducedConMenu() {
     }
 
     if (command == "1") { // Max Flow Between 2 Stations
-        string station1, station2;
+
+        string station2;
+
         while (true) {
-            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
-            if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
+            cout << "   -ENTER STATION 1: "; getline(cin >> ws, command);
+            if (utils.getGraph().findNode(command) != nullptr) break;
             cout << "   -INVALID STATION" << endl;
         }
         while (true) {
             cout << "   -ENTER STATION 2: "; getline(cin >> ws, station2);
-            if (utils.getGraph().getNodes().find(station2) != utils.getGraph().getNodes().end()) break;
+            if (utils.getGraph().findNode(station2)) break;
             cout << "   -INVALID STATION" << endl;
         }
-        int before = utils.getGraph().edmondsKarp(utils.getGraph().getNodes().at(station1), utils.getGraph().getNodes().at(station2));
-        int after = tempGraph.getGraph().edmondsKarp(tempGraph.getGraph().getNodes().at(station1), tempGraph.getGraph().getNodes().at(station2));
+
+        int before = utils.getGraph().edmondsKarp(utils.getGraph().findNode(command), utils.getGraph().findNode(station2));
+        int after = tempGraph.getGraph().edmondsKarp(tempGraph.getGraph().findNode(command), tempGraph.getGraph().findNode(station2));
         cout << endl;
-        cout << "MAX FLOW BETWEEN " << station1 << " AND " << station2 << ":\n";
+        cout << "MAX FLOW BETWEEN " << command << " AND " << station2 << ":\n";
         cout << "   -MAX FLOW: " << before << " -> " << after << endl;
         cout << "   -Difference: " << before - after << endl;
         cout << endl;
@@ -523,7 +493,7 @@ void Menu::reducedConMenu() {
     }
 
     else if (command == "2") {
-        string n;
+
         vector<pair<string, pair<int, int>>> affluences = {};
         int size = tempGraph.getGraph().getNodes().size();
         for (auto& node : tempGraph.getGraph().getNodes()) {
@@ -536,12 +506,12 @@ void Menu::reducedConMenu() {
             {return pair1.second.second - pair1.second.first > pair2.second.second - pair2.second.first;});
 
         while (true) {
-            cout << "   -NUMBER OF STATIONS: "; getline(cin >> ws, n);
-            if (stoi(n) < 1 || stoi(n) >= affluences.size()) break;
+            cout << "   -NUMBER OF STATIONS: "; getline(cin >> ws, command);
+            if (stoi(command) < 1 || stoi(command) >= affluences.size()) break;
             cout << "   -INVALID NUMBER" << endl;
         }
 
-        for (int i = 0; i < stoi(n); i++) {
+        for (int i = 0; i < stoi(command); i++) {
 
             cout << affluences[i].first << ": " << affluences[i].second.first << " -> " << affluences[i].second.second << endl;
         }
@@ -568,20 +538,18 @@ void Menu::reducedConMenu() {
 void Menu::changeEdges() {
     edges.erase(edges.begin(), edges.end());
     string station1, station2;
-    std::string flag = "1";
+    string flag = "1";
 
     while (flag == "1") {
         cout << "\n\n Choose a pair of adjacent stations to remove an edge." << endl;
 
         while (true) {
-            cout << "   -ENTER STATION 1: ";
-            getline(cin >> ws, station1);
+            cout << "   -ENTER STATION 1: "; getline(cin >> ws, station1);
             if (utils.getGraph().getNodes().find(station1) != utils.getGraph().getNodes().end()) break;
             cout << "   -INVALID STATION" << endl;
         }
         while (true) {
-            cout << "   -ENTER STATION 2: ";
-            getline(cin >> ws, station2);
+            cout << "   -ENTER STATION 2: "; getline(cin >> ws, station2);
             if (utils.getGraph().getNodes().find(station2) != utils.getGraph().getNodes().end()) break;
             cout << "   -INVALID STATION" << endl;
         }
