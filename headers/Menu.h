@@ -18,13 +18,18 @@ private:
 public:
     explicit Menu();
     void run();
+
+    void enterOption(int n);
     void press0ToContinue();
     void printStation(const std::string& name);
+    std::string enterStation(int n);
+    static void cleanTerminal();
+
+
     void mainMenu();
     void stationsMenu();
     void maxFlowMenu();
     void reducedConMenu();
-    static void cleanTerminal();
     void changeEdges();
 };
 

@@ -9,10 +9,6 @@ using namespace std;
 
 Graph::Graph() = default;
 
-void Graph::addNode(Node* node) {
-    nodes[node->station.getName()] = node;
-}
-
 void Graph::addNode(const string& name, const string& district, const string& municipality, const string& township, const string& line) {
     Station station(name, district, municipality, township, line);
     auto* node = new Node{station};

@@ -45,17 +45,16 @@ public:
 
     explicit Graph();
 
-    void addNode(Node* node);
     void addNode(const std::string& name, const std::string& district,const std::string& municipality, const std::string& township, const std::string& line);
     Node* findNode(const std::string& name);
-    void addBidirectionalEdge(const std::string& first, const std::string& second, int capacity, const std::string& service);
-
     const std::unordered_map<std::string, Node*>& getNodes() const;
+
     std::vector<std::string> getStationsInDistrict(const std::string& district) const;
     std::vector<std::string> getStationsInMunicipality(const std::string& municipality) const;
     std::vector<std::string> getStationsInTownship(const std::string& township) const;
     std::vector<std::string> getStationsInLine(const std::string& line) const;
 
+    void addBidirectionalEdge(const std::string& first, const std::string& second, int capacity, const std::string& service);
     Edge* findEdge(Node* source, Node* destination);
     void removeEdge(Node* station1, Node* station2);
     void removeEdge(Edge* edge, std::vector<Edge*>& edges);
