@@ -23,22 +23,22 @@ public:
     explicit Menu();
 
     /**
-     * @brief function designed to initialize the menu
+     * @brief Function designed to initialize the menu
      */
     void run();
 
     /**
-     * @brief function designed to choose an option in the menus
+     * @brief Function designed to choose an option in the menus
      */
     void enterOption(int n);
 
     /**
-     * @brief function designed to parse a number from user input to command private field
+     * @brief Function designed to parse a number from user input to command private field
      */
     void enterN();
 
     /**
-     * @brief function designed to get the name of a station from user input
+     * @brief Function designed to get the name of a station from user input
      * @param n
      *
      * @return
@@ -46,43 +46,43 @@ public:
     std::string enterStation(int n);
 
     /**
-     * @brief function designed to await for user input for
+     * @brief Function designed to await for user input for
      */
     void press0ToContinue();
 
     /**
-     * @brief function designed to print a station object in a user friendly way
+     * @brief Function designed to print a station object in a user friendly way
      * @param name string name of the station
      */
     void printStation(const std::string& name);
 
     /**
-     * @brief clear empty space for increased readability in the menu
+     * @brief Clear empty space for increased readability in the menu
      */
     static void cleanTerminal();
 
     /**
-     * @brief function designed to handle the menu requests
+     * @brief Function designed to handle the menu requests
      */
     void mainMenu();
 
     /**
-     * @brief function designed to handle the stations related requests
+     * @brief Function designed to handle the stations related requests
      */
     void stationsMenu();
 
     /**
-     * @brief function designed to handle maxFlow related requests
+     * @brief Function designed to handle maxFlow related requests
      */
     void maxFlowMenu();
 
     /**
-     * @brief function designed to handle reduced connectivity requests
+     * @brief Function designed to handle reduced connectivity requests
      */
     void reducedConMenu();
 
     /**
-     * @brief function designed to choose which edges to suppress from the main graph when using the reduced connectivity menu
+     * @brief Function designed to choose which edges to suppress from the main graph when using the reduced connectivity menu
      */
     void changeEdges();
 };

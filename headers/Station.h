@@ -26,28 +26,33 @@ public:
      * @param line string with the line of the station
      */
     Station(const std::string& name, const std::string& district, const std::string& municipality, const std::string& township, const std::string& line);
+
     /**
      * @brief Get function for the name of the station
      * @return string name
      */
     const std::string& getName() const;
+
     /**
      * @brief Get function for the district of the station
      * @return string district
      */
     const std::string& getDistrict() const;
+
     /**
      * @brief Get function for the municipality of the station
      * @return string municipality
      */
     const std::string& getMunicipality() const;
+
     /**
      * @brief Get function for the township of the station
      * @return string township
      */
     const std::string& getTownship() const;
+
     /**
-     * @brief returns the line field
+     * @brief Get function for the line of the station
      * @return string line
      */
     const std::string& getLine() const;

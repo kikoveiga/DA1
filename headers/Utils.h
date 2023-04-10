@@ -28,7 +28,7 @@ public:
     explicit Utils(bool distOrMun = true, const std::string& distMun = "");
 
     /**
-     * @brief get the graph private field
+     * @brief Get function for the graph private field
      * @return graph
      */
     Graph getGraph();

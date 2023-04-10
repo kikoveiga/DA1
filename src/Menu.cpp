@@ -299,11 +299,12 @@ void Menu::maxFlowMenu() {
          << "| 3. TOP N MUNICIPALITIES IN FLOW               |\n"
          << "| 4. TOP N MAX FLOWS                            |\n"
          << "| 5. MAX AFFLUENCE AT STATION                   |\n"
-         << "| 6. DIJKSTRA BETWEEN 2 STATIONS                |\n"
-         << "| 7. GO BACK                                    |\n"
+         << "| 6. TOP N MAX AFFLUENCE STATIONS               |\n"
+         << "| 7. DIJKSTRA BETWEEN 2 STATIONS                |\n"
+         << "| 8. GO BACK                                    |\n"
          << "-------------------------------------------------\n";
 
-    enterOption(7);
+    enterOption(8);
 
     if (command == "1") { // Max Flow Between 2 Stations
 
@@ -396,44 +397,67 @@ void Menu::maxFlowMenu() {
         enterStation(0);
 
         auto result = utils.getGraph().maxAffluenceAtStation(utils.getGraph().findNode(command));
-        cout << "Max Affluence at " << command << ": " << result << " trains.\n";
+        cout << endl << "Max Affluence at " << command << ": " << result << endl;
+        cout << endl;
         press0ToContinue();
     }
 
-    else if (command == "6") { // Dijkstra Between 2 Stations
+    else if (command == "6") { // Top N Max Affluence Stations
+
+        enterN();
+        vector<pair<int, string>> topStations = utils.getGraph().topMaxAffluenceStations();
+
+        cout << endl << "TOP " << min(stoi(command), (int) utils.getGraph().getNodes().size()) << " MAX AFFLUENCE STATIONS: \n";
+
+        for (int i = 0; i < utils.getGraph().getNodes().size() && i < stoi(command); i++) {
+
+            cout << "   [" << i + 1 << "] " << topStations[i].second << " - " << topStations[i].first << endl;
+        }
+
+        cout << endl;
+        press0ToContinue();
+
+    }
+
+    else if (command == "7") { // Dijkstra Between 2 Stations
 
         auto station1 = utils.getGraph().findNode(enterStation(1));
         auto station2 = utils.getGraph().findNode(enterStation(2));
 
         int result = utils.getGraph().dijkstra(station1, station2);
 
-        vector<string> path;
-        auto destination = station2;
-        int capacity = INT32_MAX;
+        if (result == INT32_MAX) cout << endl << "THERE IS NO AVAILABLE PATH FROM " << station1->station.getName() << " TO " << station2->station.getName() << endl << endl;
 
-        while (true) {
-            path.push_back(destination->station.getName());
-            if (destination == station1) break;
-            capacity = min(capacity, destination->path->capacity);
-            destination = destination->path->source;
+        else {
+
+            vector<string> path;
+            auto destination = station2;
+            int capacity = INT32_MAX;
+
+            while (true) {
+                path.push_back(destination->station.getName());
+                if (destination == station1) break;
+                capacity = min(capacity, destination->path->capacity);
+                destination = destination->path->source;
+            }
+
+            cout << endl;
+            cout << "-CHEAPEST PATH BETWEEN " << station1->station.getName() << " AND " << station2->station.getName() << ": " << endl;
+            cout << "   -COST: " << result << endl;
+            cout << "   -CAPACITY: " << capacity << endl;
+            cout << "   -PATH: ";
+
+            for (auto it = path.rbegin(); it != path.rend(); it++) {
+                cout << (*it) << " -> ";
+            }
+            cout << "\b\b\b\b" << "   " << endl;
+            cout << endl;
         }
-
-        cout << endl;
-        cout << "-CHEAPEST PATH BETWEEN " << station1->station.getName() << " AND " << station2->station.getName() << ": " << endl;
-        cout << "   -COST: " << result << endl;
-        cout << "   -CAPACITY: " << capacity << endl;
-        cout << "   -PATH: ";
-
-        for (auto it = path.rbegin(); it != path.rend(); it++) {
-            cout << (*it) << " -> ";
-        }
-        cout << "\b\b\b\b" << "   " << endl;
-        cout << endl;
 
         press0ToContinue();
     }
 
-    else if (command == "7") { // Go Back
+    else if (command == "8") { // Go Back
             command = "0";
             return;
     }
@@ -501,21 +525,28 @@ void Menu::reducedConMenu() {
             {return pair1.second.first - pair1.second.second > pair2.second.first - pair2.second.second;});
 
         enterN();
+        cout << endl << "TOP " << min(stoi(command), (int) affluences.size()) << " MOST AFFECTED STATIONS IN AFFLUENCE: " << endl;
 
         for (int i = 0; i < affluences.size() && i < stoi(command); i++) {
 
             if (affluences[i].second.second == affluences[i].second.first)
                 break;
 
-            cout << '[' << i + 1 << "] " << affluences[i].first << ": " << affluences[i].second.first << " -> " << affluences[i].second.second << endl;
+            cout << "   [" << i + 1 << "] " << affluences[i].first << ": " << affluences[i].second.first << " -> " << affluences[i].second.second << endl;
         }
 
+        cout << endl;
         press0ToContinue();
     }
 
     else if (command == "3") { // List Failing Segments
-        for (const auto& edge : bidirectionalEdges)
-            cout << edge.first << " <-> " << edge.second << endl;
+
+        cout << endl << "FAILING SEGMENTS: " << endl;
+        int i = 0;
+        for (auto& edge : bidirectionalEdges)
+            cout << "   [" << i++ + 1 << "] " << edge.first << " <-> " << edge.second << endl;
+
+        cout << endl;
         press0ToContinue();
     }
 
@@ -541,12 +572,15 @@ void Menu::changeEdges() {
         string station1 = enterStation(1);
         string station2 = enterStation(2);
 
-        if (utils.getGraph().findEdge(utils.getGraph().findNode(station1), utils.getGraph().findNode(station2)) != nullptr)
-            cout << "NON EXISTENT EDGE\n\n";
-        else
-            command < station2 ? bidirectionalEdges.emplace_back(station1, station2) : bidirectionalEdges.emplace_back(station2, station1);
+        if (utils.getGraph().findEdge(utils.getGraph().findNode(station1), utils.getGraph().findNode(station2)) == nullptr)
+            cout << "   -NON EXISTENT EDGE\n\n";
 
-        cout << "PRESS 0 TO END EDITION\nPRESS 1 TO CONTINUE: "; getline(cin >> ws, flag);
+        else {
+            command < station2 ? bidirectionalEdges.emplace_back(station1, station2) : bidirectionalEdges.emplace_back(station2, station1);
+            cout << "   -BIDIRECTIONAL EDGE REMOVED!" << endl << endl;
+        }
+
+        cout << "PRESS 0 TO CONTINUE OR 1 TO REMOVE MORE EDGES: "; getline(cin >> ws, flag);
     }
     reducedConMenu();
 }

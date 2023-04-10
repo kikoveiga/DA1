@@ -120,11 +120,11 @@ void Graph::setAllFlows0() {
     }
 }
 
-void Graph::dfs(Node* node) {
+void Graph::dfs(Node* source) {
 
-    node->visited = true;
+    source->visited = true;
 
-    for (auto next : node->adj) {
+    for (auto next : source->adj) {
         if (!next->destination->visited) {
             dfs(next->destination);
         }
@@ -346,6 +346,18 @@ int Graph::maxAffluenceAtStation(Node* sink) {
     }
     nodes.erase("super");
     return affluence;
+}
+
+std::vector<std::pair<int, std::string>> Graph::topMaxAffluenceStations() {
+
+    vector<pair<int, string>> topMaxAffluence(nodes.size());
+
+    for (auto& sink : nodes) {
+        topMaxAffluence.emplace_back(maxAffluenceAtStation(sink.second), sink.first);
+    }
+
+    sort(topMaxAffluence.begin(), topMaxAffluence.end(), greater<>());
+    return topMaxAffluence;
 }
 
 bool Graph::compareDijkstra(Node* node1, Node* node2) {
