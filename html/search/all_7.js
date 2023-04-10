@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['getallflows_31',['getAllFlows',['../class_graph.html#a7775f65a0c60e76bcc3a157d63b65b2f',1,'Graph']]],
+  ['getdistrict_32',['getDistrict',['../class_station.html#a9b1777b396029adcdac76514cb208f8b',1,'Station']]],
+  ['getdistricts_33',['getDistricts',['../class_utils.html#a97c5db5061c8886ba2c397ddf0c9dbe7',1,'Utils']]],
+  ['getgraph_34',['getGraph',['../class_utils.html#a149117c18ba46c3c490b9a26a97dab4f',1,'Utils']]],
+  ['getline_35',['getLine',['../class_station.html#aab31a7d7b664b7a45288e09362a9a11d',1,'Station']]],
+  ['getmaxflowstations_36',['getMaxFlowStations',['../class_graph.html#ac53d0e1b28a07d9aba0f861e45610e87',1,'Graph']]],
+  ['getmunicipalities_37',['getMunicipalities',['../class_utils.html#a007e1065e99e7563ed041561445e10b5',1,'Utils']]],
+  ['getmunicipality_38',['getMunicipality',['../class_station.html#add59cb361f91a4e47d9b503c79df700d',1,'Station']]],
+  ['getname_39',['getName',['../class_station.html#a9a11b1e1e738259b77c6b76e17816a99',1,'Station']]],
+  ['getnodes_40',['getNodes',['../class_graph.html#ae1cc37556640eab7cf73ceb043946af7',1,'Graph']]],
+  ['getstationsindistrict_41',['getStationsInDistrict',['../class_graph.html#a98054ad8ecaa3ffbd2a6ded9c39007e4',1,'Graph']]],
+  ['getstationsinline_42',['getStationsInLine',['../class_graph.html#a44241f0202b2df9ebc6fb2e9d1d0f0f2',1,'Graph']]],
+  ['getstationsinmunicipality_43',['getStationsInMunicipality',['../class_graph.html#ade13a1bab0bde0fafa75066c809b072e',1,'Graph']]],
+  ['getstationsintownship_44',['getStationsInTownship',['../class_graph.html#a0eff0d8e3545a53676a93525bf181cf8',1,'Graph']]],
+  ['gettownship_45',['getTownship',['../class_station.html#ac54be77b706865fa7713fa0c386bf558',1,'Station']]],
+  ['graph_46',['Graph',['../class_graph.html',1,'Graph'],['../class_graph.html#ae4c72b8ac4d693c49800a4c7e273654f',1,'Graph::Graph()']]],
+  ['graph_2ecpp_47',['Graph.cpp',['../_graph_8cpp.html',1,'']]],
+  ['graph_2eh_48',['Graph.h',['../_graph_8h.html',1,'']]]
+];
