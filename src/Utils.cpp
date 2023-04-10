@@ -86,11 +86,3 @@ void Utils::readNetwork(const string& distMun) {
             edges.insert({fields[0], fields[1]});
         }
 }
-
-void Utils::removeEdge(const pair<string, string> &edge) {
-    edges.erase(edge);
-}
-
-std::set<std::pair<std::string, std::string>> Utils::getEdges() {
-    return edges;
-}

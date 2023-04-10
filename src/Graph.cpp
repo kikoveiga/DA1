@@ -15,12 +15,11 @@ void Graph::addNode(const string& name, const string& district, const string& mu
     nodes[name] = node;
 }
 
-
-
 Graph::Node* Graph::findNode(const string& name) {
     if (nodes.find(name) == nullptr) return nullptr;
     return nodes[name];
 }
+
 void Graph::addBidirectionalEdge(const string& first, const string& second, int capacity, const string& service) {
 
     Node* firstNode = nodes[first];
@@ -35,40 +34,6 @@ void Graph::addBidirectionalEdge(const string& first, const string& second, int 
     firstNode->incoming.push_back(secondEdge);
     secondNode->incoming.push_back(firstEdge);
 }
-
-void Graph::removeEdge(Graph::Node *station1, Graph::Node *station2) {
-    vector<Edge*> helper = {};
-    for (auto& edge : station1->adj) {
-        if (edge->destination != station2)
-            continue;
-        helper.push_back(edge);
-    }
-    station1->adj = helper;
-    helper = {};
-    for (auto& edge : station2->adj) {
-        if (edge->destination != station1)
-            continue;
-        helper.push_back(edge);
-    }
-    station2->adj = helper;
-    helper = {};
-
-    for (auto& edge : station1->incoming) {
-        if (edge->source != station2)
-            continue;
-        helper.push_back(edge);
-    }
-    station1->incoming = helper;
-    helper = {};
-
-    for (auto& edge : station2->incoming) {
-        if (edge->source != station1)
-            continue;
-        helper.push_back(edge);
-    }
-    station2->incoming = helper;
-}
-
 
 const unordered_map<string, Graph::Node*>& Graph::getNodes() const {
     return nodes;
@@ -167,7 +132,7 @@ void Graph::dfs(Node* node) {
 }
 
 
-std::vector<Graph::FlowStations> Graph::getMaxFlowStations() {
+vector<Graph::FlowStations> Graph::getMaxFlowStations() {
     int maxFlow = 0;
     vector<FlowStations> res;
 
@@ -191,7 +156,7 @@ std::vector<Graph::FlowStations> Graph::getMaxFlowStations() {
     return res;
 }
 
-std::vector<Graph::FlowStations> Graph::getAllFlows() {
+vector<Graph::FlowStations> Graph::getAllFlows() {
 
     vector<FlowStations> res;
     if (nodes.size() == 1) {
@@ -252,11 +217,9 @@ int Graph::findMinResidualAlongPath(Node* source, Node* sink) {
         auto edge = node->path;
 
         if (edge->destination == node) {
-            flow = std::min(flow, edge->capacity - edge->flow);
+            flow = min(flow, edge->capacity - edge->flow);
             node = edge->source;
-        }
-
-        else {
+        } else {
             flow = min(flow, edge->flow);
             node = edge->destination;
         }
@@ -351,7 +314,7 @@ pair<int, int> Graph::cheapEdmondsKarp(Node* source, Node* sink) {
     setAllFlows0();
     int cost = 0;
     int totalCost = 0;
-    int lastFlow;
+
     // Loop to find augmentation paths
     while (bfsFindCheapAugmentingPath(source, sink)) {
         int flow = findMinResidualAlongPath(source, sink);
@@ -364,33 +327,25 @@ pair<int, int> Graph::cheapEdmondsKarp(Node* source, Node* sink) {
     return {maxFlow, totalCost};
 }
 
-int Graph::maxAffluence(Node* sink) {
+int Graph::maxAffluenceAtStation(Node* sink) {
     vector<Node*> sources;
     for (auto& node : nodes) {
-        if (node.second->adj.size() == 1)
+        if (node.second->adj.size() == 1 && node.second != sink)
             sources.push_back(node.second);
     }
     addNode("super", " ", "  ", " ", " ");
     auto superNode = nodes["super"];
-    for (auto& node : sources) {
+    for (auto node : sources) {
         addBidirectionalEdge("super", node->station.getName(), INT32_MAX, "STANDARD");
     }
+
     int affluence = edmondsKarp(superNode, sink);
-    for (auto& node : sources) {
+    for (auto node : sources) {
         node->incoming.pop_back();
         node->adj.pop_back();
     }
     nodes.erase("super");
     return affluence;
-}
-
-bool Graph::isAdjacent(Graph::Node *station1, Graph::Node *station2) {
-
-    for (const auto& edge : station1->adj)
-        if (edge->destination == station2)
-            return true;
-
-    return false;
 }
 
 bool Graph::compareDijkstra(Node* node1, Node* node2) {
@@ -411,7 +366,6 @@ int Graph::dijkstra(Graph::Node* source, Graph::Node* target) {
     while (!queue.empty()) {
 
         Node* node = queue.top();
-        if (node == target) break;
         queue.pop();
 
         for (auto edge: node->adj) {
